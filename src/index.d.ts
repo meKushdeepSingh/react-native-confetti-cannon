@@ -1,12 +1,11 @@
-import * as React from 'react';
+import * as React from "react";
 
 export interface ExplosionProps {
   count: number;
   origin: {
     x: number;
-    y: number
+    y: number;
   };
-  explosionSpeed?: number;
   fallSpeed?: number;
   colors?: string[];
   fadeOut?: boolean;
@@ -40,7 +39,10 @@ export declare const DEFAULT_COLORS: string[];
 export declare const DEFAULT_EXPLOSION_SPEED: number;
 export declare const DEFAULT_FALL_SPEED: number;
 
-declare class Explosion extends React.PureComponent<ExplosionProps, ExplosionState> {
+declare class Explosion extends React.PureComponent<
+  ExplosionProps,
+  ExplosionState
+> {
   start: (resume?: boolean) => void;
   resume: () => void;
   stop: () => void;

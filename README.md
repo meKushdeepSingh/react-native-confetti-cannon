@@ -23,47 +23,46 @@ yarn add react-native-confetti-cannon
 ## Usage
 
 ```js
-import ConfettiCannon from 'react-native-confetti-cannon';
+import ConfettiCannon from "react-native-confetti-cannon";
 
 const MyComponent = () => (
-  <ConfettiCannon count={200} origin={{x: -10, y: 0}} />
+  <ConfettiCannon count={200} origin={{ x: -10, y: 0 }} />
 );
 ```
 
 ## Props
 
-| Name             | Type                   | Description                                | Required | Default        |
-|------------------|------------------------|--------------------------------------------|----------|----------------|
-| count            | number                 | items count to display                     | required |                |
-| origin           | {x: number, y: number} | animation position origin                  | required |                |
-| explosionSpeed   | number                 | explosion duration (ms) from origin to top |          | 350            |
-| fallSpeed        | number                 | fall duration (ms) from top to bottom      |          | 3000           |
-| fadeOut          | boolean                | make the confettis disappear at the end    |          | false          |
-| colors           | string[]               | give your own colors to the confettis      |          | default colors |
-| autoStart        | boolean                | auto start the animation                   |          | true           |
-| autoStartDelay   | number                 | delay to wait before triggering animation  |          | 0              |
+| Name           | Type                   | Description                               | Required | Default        |
+| -------------- | ---------------------- | ----------------------------------------- | -------- | -------------- |
+| count          | number                 | items count to display                    | required |                |
+| origin         | {x: number, y: number} | animation position origin                 | required |                |
+| fallSpeed      | number                 | fall duration (ms) from top to bottom     |          | 3000           |
+| fadeOut        | boolean                | make the confettis disappear at the end   |          | false          |
+| colors         | string[]               | give your own colors to the confettis     |          | default colors |
+| autoStart      | boolean                | auto start the animation                  |          | true           |
+| autoStartDelay | number                 | delay to wait before triggering animation |          | 0              |
 
 ## Events
 
-| Name              | Returns               | Description                                | Required |
-|-------------------|-----------------------|--------------------------------------------|----------|
-| onAnimationStart  | void                  | callback triggered at animation start      |          |
-| onAnimationResume | void                  | callback triggered at animation resume     |          |
-| onAnimationStop   | void                  | callback triggered at animation stop       |          |
-| onAnimationEnd    | void                  | callback triggered at animation end        |          |
+| Name              | Returns | Description                            | Required |
+| ----------------- | ------- | -------------------------------------- | -------- |
+| onAnimationStart  | void    | callback triggered at animation start  |          |
+| onAnimationResume | void    | callback triggered at animation resume |          |
+| onAnimationStop   | void    | callback triggered at animation stop   |          |
+| onAnimationEnd    | void    | callback triggered at animation end    |          |
 
 ## Methods
 
-| Name             | Returns                | Description                                | Required |
-|------------------|------------------------|--------------------------------------------|----------|
-| start            | void                   | start the animation programmatically       |          |
-| resume           | void                   | resume the animation programmatically      |          |
-| stop             | void                   | stop the animation programmatically        |          |
+| Name   | Returns | Description                           | Required |
+| ------ | ------- | ------------------------------------- | -------- |
+| start  | void    | start the animation programmatically  |          |
+| resume | void    | resume the animation programmatically |          |
+| stop   | void    | stop the animation programmatically   |          |
 
 _For example:_
 
 ```js
-import ConfettiCannon from 'react-native-confetti-cannon';
+import ConfettiCannon from "react-native-confetti-cannon";
 
 class MyComponent extends React.PureComponent {
   explosion;
@@ -76,9 +75,9 @@ class MyComponent extends React.PureComponent {
     return (
       <ConfettiCannon
         count={200}
-        origin={{x: -10, y: 0}}
+        origin={{ x: -10, y: 0 }}
         autoStart={false}
-        ref={ref => (this.explosion = ref)}
+        ref={(ref) => (this.explosion = ref)}
       />
     );
   }
@@ -94,6 +93,7 @@ npm install && npm start
 ```
 
 And choose one of the following Expo commands:
+
 - `i`: open in iOS simulator
 - `a`: open in Android emulator
 - `w`: open in web browser

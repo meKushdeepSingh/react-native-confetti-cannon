@@ -1,102 +1,60 @@
-import * as React from 'react';
-import { Dimensions } from 'react-native';
-import { storiesOf } from '@storybook/react-native';
-import { withKnobs, boolean, number, array, button } from '@storybook/addon-knobs';
-import { action } from '@storybook/addon-actions';
-import ConfettiCannon, {DEFAULT_COLORS, DEFAULT_EXPLOSION_SPEED, DEFAULT_FALL_SPEED} from 'react-native-confetti-cannon';
+// @flow
 
-import ScreenSimulator from './components/screen-simulator';
+import * as React from "react";
+import { StyleSheet, Animated } from "react-native";
 
-const { width } = Dimensions.get('window');
+import { randomValue } from "../utils";
 
-storiesOf('Demo', module)
-  .addDecorator(withKnobs)
-  .addDecorator(ScreenSimulator)
-  .add('Default', () => {
-    let ref;
+type Interpolations = Array<{
+  translateX?: Animated.Interpolation,
+  translateY?: Animated.Interpolation,
+  rotate?: Animated.Interpolation,
+  rotateX?: Animated.Interpolation,
+  rotateY?: Animated.Interpolation,
+  perspective?: number,
+}>;
 
-    const result = (
-      <ConfettiCannon
-        count={number('count', 200, {}, 'Props')}
-        origin={{
-          x: number('origin.x', -10, {}, 'Props'),
-          y: number('origin.y', -10, {}, 'Props')
-        }}
-        explosionSpeed={number('explosionSpeed', DEFAULT_EXPLOSION_SPEED, {}, 'Props')}
-        fallSpeed={number('fallSpeed', DEFAULT_FALL_SPEED, {}, 'Props')}
-        fadeOut={boolean('fadeOut', false, 'Props')}
-        colors={array('colors', DEFAULT_COLORS, ',', 'Props')}
-        autoStart={boolean('autoStart', true, 'Props')}
-        autoStartDelay={number('autoStartDelay', 1000, {}, 'Props')}
-        onAnimationStart={action('onAnimationStart')}
-        onAnimationStop={action('onAnimationStop')}
-        onAnimationResume={action('onAnimationResume')}
-        onAnimationEnd={action('onAnimationEnd')}
-        ref={_ref => ref = _ref}
-      />
+type Props = {|
+  containerTransform: Interpolations,
+  transform: Interpolations,
+  color: string,
+  opacity: Animated.Interpolation,
+  testID?: string,
+|};
+
+class Confetti extends React.PureComponent<Props> {
+  props: Props;
+  width: number = randomValue(10, 20);
+  height: number = randomValue(10, 15);
+  isRounded: boolean = Math.round(randomValue(0, 1)) === 1;
+
+  render() {
+    const { containerTransform, transform, opacity, color } = this.props;
+    const { width, height, isRounded } = this;
+    const containerStyle = { transform: containerTransform };
+    const style = { width, height, backgroundColor: color, transform, opacity };
+
+    return (
+      <Animated.View
+        pointerEvents="none"
+        renderToHardwareTextureAndroid={true}
+        style={[styles.confetti, containerStyle]}
+      >
+        <Animated.View style={[isRounded && styles.rounded, style]} />
+      </Animated.View>
     );
+  }
+}
 
-    button('Start', () => ref.start(), 'Methods');
-    button('Stop', () => ref.stop(), 'Methods');
-    button('Resume', () => ref.resume(), 'Methods');
+const styles = StyleSheet.create({
+  confetti: {
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+  },
+  rounded: {
+    borderRadius: 100,
+  },
+});
 
-    return result;
-  })
-  .add('Multiple', () => {
-    let ref1;
-    let ref2;
-
-    const result = (
-      <React.Fragment>
-        <ConfettiCannon
-          count={number('count', 100, {}, 'Props (left)')}
-          origin={{
-            x: number('origin.x', -10, {}, 'Props (left)'),
-            y: number('origin.y', -10, {}, 'Props (left)')
-          }}
-          explosionSpeed={number('explosionSpeed', DEFAULT_EXPLOSION_SPEED, {}, 'Props (left)')}
-          fallSpeed={number('fallSpeed', DEFAULT_FALL_SPEED, {}, 'Props (left)')}
-          fadeOut={boolean('fadeOut', false, 'Props (left)')}
-          colors={array('colors', DEFAULT_COLORS, ',', 'Props (left)')}
-          autoStart={boolean('autoStart', true, 'Props (left)')}
-          autoStartDelay={number('autoStartDelay', 0, {}, 'Props (left)')}
-          onAnimationStart={() => {
-            action('onAnimationStart (left)');
-            setTimeout(ref2.start, DEFAULT_EXPLOSION_SPEED);
-          }}
-          onAnimationStop={action('onAnimationStop (left)')}
-          onAnimationResume={action('onAnimationResume (left)')}
-          onAnimationEnd={action('onAnimationEnd (left)')}
-          ref={ref => ref1 = ref}
-        />
-        <ConfettiCannon
-          count={number('count', 100, {}, 'Props (right)')}
-          origin={{
-            x: number('origin.x', width + 10, {}, 'Props (right)'),
-            y: number('origin.y', -10, {}, 'Props (right)')
-          }}
-          explosionSpeed={number('explosionSpeed', DEFAULT_EXPLOSION_SPEED, {}, 'Props (right)')}
-          fallSpeed={number('fallSpeed', DEFAULT_FALL_SPEED, {}, 'Props (right)')}
-          fadeOut={boolean('fadeOut', false, 'Props (right)')}
-          colors={array('colors', DEFAULT_COLORS, ',', 'Props (right)')}
-          autoStart={boolean('autoStart', false, 'Props (right)')}
-          autoStartDelay={number('autoStartDelay', 0, {}, 'Props (right)')}
-          onAnimationStart={action('onAnimationStart (right)')}
-          onAnimationStop={action('onAnimationStop (right)')}
-          onAnimationResume={action('onAnimationResume (right)')}
-          onAnimationEnd={action('onAnimationEnd (right)')}
-          ref={ref => ref2 = ref}
-        />
-      </React.Fragment>
-    );
-
-    button('Start', () => ref1.start(), 'Methods (left)');
-    button('Stop', () => ref1.stop(), 'Methods (left)');
-    button('Resume', () => ref1.resume(), 'Methods (left)');
-
-    button('Start', () => ref2.start(), 'Methods (right)');
-    button('Stop', () => ref2.stop(), 'Methods (right)');
-    button('Resume', () => ref2.resume(), 'Methods (right)');
-
-    return result;
-  });
+export default Confetti;
